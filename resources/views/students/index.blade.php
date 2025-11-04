@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="mb-0">Students</h3>
+        <h3 class="mb-0">AMA Students</h3>
         <div class="d-flex gap-2">
             <a href="{{ route('students.batch-create') }}" class="btn btn-success">Batch Add</a>
             <a href="{{ route('students.create') }}" class="btn btn-primary">Add Student</a>
