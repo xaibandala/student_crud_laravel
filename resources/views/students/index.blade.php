@@ -4,13 +4,23 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="d-flex align-items-center">
             <img src="{{ asset('images/ama2.png') }}" alt="AMA Logo" class="me-2" style="height:40px;">
-            <h3 class="mb-0">AMA Students</h3>
+            <h3 class="mb-0">AMAer Students</h3>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ route('students.batch-create') }}" class="btn btn-success">Batch Add</a>
             <a href="{{ route('students.create') }}" class="btn btn-primary">Add Student</a>
         </div>
     </div>
+
+    <form method="GET" action="{{ route('students.index') }}" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="q" value="{{ request('q') }}" class="form-control" placeholder="Search by ID, name, course or year level...">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+            @if(request('q'))
+                <a href="{{ route('students.index') }}" class="btn btn-outline-secondary">Clear</a>
+            @endif
+        </div>
+    </form>
 
     @if ($errors->any())
         <div class="alert alert-danger">

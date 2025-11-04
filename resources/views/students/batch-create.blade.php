@@ -3,7 +3,7 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="mb-0">Batch Add Students</h3>
-        <a href="{{ route('students.index') }}" class="btn btn-secondary">Back to List</a>
+        <a href="{{ route('students.index') }}" class="btn btn-secondary">Cancel</a>
     </div>
 
     @if ($errors->any())

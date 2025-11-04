@@ -23,6 +23,7 @@
             <label for="year_level" class="form-label">Year Level</label>
             <input type="number" name="year_level" id="year_level" class="form-control" min="1" max="5" required>
         </div>
-        <button type="submit" class="btn btn-primary">Add Student</button>
+        <button type="submit" class="btn btn-success">Add Student</button>
+        <a href="{{ route('students.index') }}" class="btn btn-secondary ms-2">Cancel</a>
     </form>
 @endsection
