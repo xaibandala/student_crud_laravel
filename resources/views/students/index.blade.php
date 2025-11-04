@@ -3,14 +3,40 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="mb-0">Students</h3>
-        <a href="{{ route('students.create') }}" class="btn btn-primary">Add Student</a>
+        <div class="d-flex gap-2">
+            <a href="{{ route('students.batch-create') }}" class="btn btn-success">Batch Add</a>
+            <a href="{{ route('students.create') }}" class="btn btn-primary">Add Student</a>
+        </div>
     </div>
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     @if($students->count())
+        <div class="d-flex justify-content-end mb-2 gap-2">
+            <button id="btnBatchUpdate" type="submit" class="btn btn-warning" disabled form="batchForm">
+                Update Selected
+            </button>
+            <button id="btnBatchDelete" type="submit" class="btn btn-danger" disabled form="batchForm"
+                    formaction="{{ route('students.batch-destroy') }}">
+                Delete Selected
+            </button>
+        </div>
+
         <div class="table-responsive">
             <table class="table table-striped align-middle">
                 <thead>
                 <tr>
+                    <th>
+                        <input type="checkbox" id="selectAll">
+                    </th>
                     <th>#</th>
                     <th>Student ID</th>
                     <th>Name</th>
@@ -22,6 +48,9 @@
                 <tbody>
                 @foreach($students as $student)
                     <tr>
+                        <td>
+                            <input type="checkbox" class="row-check" value="{{ $student->id }}">
+                        </td>
                         <td>{{ $student->id }}</td>
                         <td>{{ $student->student_id }}</td>
                         <td>{{ $student->name }}</td>
@@ -43,8 +72,66 @@
             </table>
         </div>
 
+        <form id="batchForm" method="POST" action="{{ route('students.batch-edit') }}" class="d-none">
+            @csrf
+        </form>
+
         {{ $students->links() }}
     @else
         <div class="alert alert-info">No students found. Add one.</div>
     @endif
+
+    <script>
+        const selectAll = document.getElementById('selectAll');
+        const batchForm = document.getElementById('batchForm');
+        const btnUpdate = document.getElementById('btnBatchUpdate');
+        const btnDelete = document.getElementById('btnBatchDelete');
+        const rowChecks = () => Array.from(document.querySelectorAll('.row-check'));
+
+        function updateButtonsState() {
+            const anyChecked = rowChecks().some(ch => ch.checked);
+            if (btnUpdate) btnUpdate.disabled = !anyChecked;
+            if (btnDelete) btnDelete.disabled = !anyChecked;
+        }
+
+        function rebuildHiddenIds() {
+            // Remove any existing hidden ids
+            batchForm.querySelectorAll('input[name="ids[]"]').forEach(n => n.remove());
+            // Add hidden inputs for each checked row
+            rowChecks().filter(ch => ch.checked).forEach(ch => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ids[]';
+                input.value = ch.value;
+                batchForm.appendChild(input);
+            });
+        }
+
+        if (selectAll) {
+            selectAll.addEventListener('change', function(){
+                rowChecks().forEach(ch => ch.checked = selectAll.checked);
+                updateButtonsState();
+                rebuildHiddenIds();
+            });
+        }
+        document.addEventListener('change', function(e){
+            if (e.target && e.target.classList && e.target.classList.contains('row-check')) {
+                updateButtonsState();
+                rebuildHiddenIds();
+            }
+        });
+        updateButtonsState();
+
+        if (batchForm) {
+            batchForm.addEventListener('submit', function(e){
+                const anyChecked = rowChecks().some(ch => ch.checked);
+                if (!anyChecked) {
+                    e.preventDefault();
+                    alert('Please select at least one student.');
+                    return;
+                }
+                rebuildHiddenIds();
+            });
+        }
+    </script>
 @endsection
