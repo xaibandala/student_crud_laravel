@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    <h3 class="mb-3">Edit Student</h3>
+    <div class="d-flex align-items-center mb-3">
+        <img src="{{ asset('images/ama2.png') }}" alt="AMA Logo" class="me-2" style="height:40px;">
+        <h3 class="mb-0">Edit Student</h3>
+    </div>
 
     <div class="card">
         <div class="card-body">

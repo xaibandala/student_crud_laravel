@@ -2,7 +2,10 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3 class="mb-0">Add Student</h3>
+        <div class="d-flex align-items-center">
+            <img src="{{ asset('images/ama2.png') }}" alt="AMA Logo" class="me-2" style="height:40px;">
+            <h3 class="mb-0">Add Student</h3>
+        </div>
     </div>
 
     <form action="{{ route('students.store') }}" method="POST">
